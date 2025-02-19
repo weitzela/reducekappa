@@ -32,28 +32,130 @@ Check out potentially helpful attributes attached to the data objects
     [4] "n_og_terms"          "n_reduced_terms"     "genes_in_cluster_df"
     [7] "cluster_info"       
 
-    attr(pathway_reduce, "cluster_info") |> head(5)
+    attr(pathway_reduce, "cluster_info") |> head(5) |> knitr::kable()
 
-    # A tibble: 5 × 6
-    # Groups:   cluster [2]
-      cluster cluster_id cluster_term            Geneset.ID Description cluster_size
-        <int> <chr>      <chr>                   <chr>      <chr>              <int>
-    1       1 GO:0005759 mitochondrial matrix    GO:0005759 mitochondr…            1
-    2       2 GO:0098798 mitochondrial protein-… GO:0098798 mitochondr…           28
-    3       2 GO:0098798 mitochondrial protein-… GO:0045333 cellular r…           28
-    4       2 GO:0098798 mitochondrial protein-… GO:0098800 inner mito…           28
-    5       2 GO:0098798 mitochondrial protein-… GO:0009060 aerobic re…           28
+<table>
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 8%" />
+<col style="width: 31%" />
+<col style="width: 8%" />
+<col style="width: 34%" />
+<col style="width: 10%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">cluster</th>
+<th style="text-align: left;">cluster_id</th>
+<th style="text-align: left;">cluster_term</th>
+<th style="text-align: left;">Geneset.ID</th>
+<th style="text-align: left;">Description</th>
+<th style="text-align: right;">cluster_size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;"><a href="GO:0005759"
+class="uri">GO:0005759</a></td>
+<td style="text-align: left;">mitochondrial matrix</td>
+<td style="text-align: left;"><a href="GO:0005759"
+class="uri">GO:0005759</a></td>
+<td style="text-align: left;">mitochondrial matrix</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;"><a href="GO:0098798"
+class="uri">GO:0098798</a></td>
+<td style="text-align: left;">mitochondrial protein-containing
+complex</td>
+<td style="text-align: left;"><a href="GO:0098798"
+class="uri">GO:0098798</a></td>
+<td style="text-align: left;">mitochondrial protein-containing
+complex</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;"><a href="GO:0098798"
+class="uri">GO:0098798</a></td>
+<td style="text-align: left;">mitochondrial protein-containing
+complex</td>
+<td style="text-align: left;"><a href="GO:0045333"
+class="uri">GO:0045333</a></td>
+<td style="text-align: left;">cellular respiration</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;"><a href="GO:0098798"
+class="uri">GO:0098798</a></td>
+<td style="text-align: left;">mitochondrial protein-containing
+complex</td>
+<td style="text-align: left;"><a href="GO:0098800"
+class="uri">GO:0098800</a></td>
+<td style="text-align: left;">inner mitochondrial membrane protein
+complex</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;"><a href="GO:0098798"
+class="uri">GO:0098798</a></td>
+<td style="text-align: left;">mitochondrial protein-containing
+complex</td>
+<td style="text-align: left;"><a href="GO:0009060"
+class="uri">GO:0009060</a></td>
+<td style="text-align: left;">aerobic respiration</td>
+<td style="text-align: right;">28</td>
+</tr>
+</tbody>
+</table>
 
-    attr(pathway_reduce, "genes_in_cluster_df") |> head(5)
+    attr(pathway_reduce, "genes_in_cluster_df") |> head(5) |> knitr::kable()
 
-    # A tibble: 5 × 3
-      cluster_id cluster_term         Genes.Returned    
-      <chr>      <chr>                <chr>             
-    1 GO:0005759 mitochondrial matrix ENSRNOG00000002840
-    2 GO:0005759 mitochondrial matrix ENSRNOG00000017032
-    3 GO:0005759 mitochondrial matrix ENSRNOG00000006930
-    4 GO:0005759 mitochondrial matrix ENSRNOG00000024128
-    5 GO:0005759 mitochondrial matrix ENSRNOG00000006375
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">cluster_id</th>
+<th style="text-align: left;">cluster_term</th>
+<th style="text-align: left;">Genes.Returned</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a href="GO:0005759"
+class="uri">GO:0005759</a></td>
+<td style="text-align: left;">mitochondrial matrix</td>
+<td style="text-align: left;">ENSRNOG00000002840</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="GO:0005759"
+class="uri">GO:0005759</a></td>
+<td style="text-align: left;">mitochondrial matrix</td>
+<td style="text-align: left;">ENSRNOG00000017032</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="GO:0005759"
+class="uri">GO:0005759</a></td>
+<td style="text-align: left;">mitochondrial matrix</td>
+<td style="text-align: left;">ENSRNOG00000006930</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="GO:0005759"
+class="uri">GO:0005759</a></td>
+<td style="text-align: left;">mitochondrial matrix</td>
+<td style="text-align: left;">ENSRNOG00000024128</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="GO:0005759"
+class="uri">GO:0005759</a></td>
+<td style="text-align: left;">mitochondrial matrix</td>
+<td style="text-align: left;">ENSRNOG00000006375</td>
+</tr>
+</tbody>
+</table>
 
 **Example 2: Clustering Across Multiple Trials**  
 To create consistent clusters across multiple pathway enrichment trials,

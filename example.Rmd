@@ -29,8 +29,8 @@ pathway_reduce = pathway_res |>
 Check out potentially helpful attributes attached to the data objects
 ```{r}
 attributes(pathway_reduce) |> names()
-attr(pathway_reduce, "cluster_info") |> head(5)
-attr(pathway_reduce, "genes_in_cluster_df") |> head(5)
+attr(pathway_reduce, "cluster_info") |> head(5) |> knitr::kable()
+attr(pathway_reduce, "genes_in_cluster_df") |> head(5) |> knitr::kable()
 ```
 
 **Example 2: Clustering Across Multiple Trials**  
