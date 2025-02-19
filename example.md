@@ -18,11 +18,12 @@ with the `data_label` column indicating the trial.
 This example processes enrichment results from a single trial
 (identified by data\_label == “G”) and removes redundant pathways while
 keeping the most significant category per cluster as the representative
-term.
+term. If you want to retain all results, do not include the
+filter\_representative argument in the function call.
 
     pathway_reduce = pathway_res |> 
       filter(data_label == "G", FDR < 0.05) |> 
-      reduceKappa_wrapper()
+      reduceKappa_wrapper(filter_representative = TRUE)
 
 Check out potentially helpful attributes attached to the data objects
 

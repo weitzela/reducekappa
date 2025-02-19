@@ -19,11 +19,11 @@ pathway_res = read_tsv("pathway-res-example.txt")
 ```
 
 **Example 1: Reducing Redundant Pathways for a Single Trial**  
-This example processes enrichment results from a single trial (identified by data_label == "G") and removes redundant pathways while keeping the most significant category per cluster as the representative term.
+This example processes enrichment results from a single trial (identified by data_label == "G") and removes redundant pathways while keeping the most significant category per cluster as the representative term. If you want to retain all results, do not include the filter_representative argument in the function call. 
 ```{r}
 pathway_reduce = pathway_res |> 
   filter(data_label == "G", FDR < 0.05) |> 
-  reduceKappa_wrapper()
+  reduceKappa_wrapper(filter_representative = TRUE)
 ```
 
 Check out potentially helpful attributes attached to the data objects

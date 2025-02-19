@@ -66,7 +66,7 @@ reduceKappa = function(df, collapse_small_clusters = FALSE) {
   return(clusters)
 }
 
-reduceKappa_wrapper = function(df, group_slice = NULL, geneset_id_col = "Geneset.ID", gene_col = "Genes.Returned", sig_col = "P.value", descrip_col = "Description", delim = NULL, rev_sig = FALSE, v = FALSE) {
+reduceKappa_wrapper = function(df, group_slice = NULL, geneset_id_col = "Geneset.ID", gene_col = "Genes.Returned", sig_col = "P.value", descrip_col = "Description", delim = NULL, rev_sig = FALSE, v = FALSE, filter_representative = FALSE) {
   # Performs complete gene set reductoin, selecting representative terms and annotating clusters. Additional relevant information is provided as object attributes.
   # group_slice: IF you are comparing results from multiple analyses and you want to retain the top categories by group, then set group_slice to the column(s) that you want to keep one cluster observation per group from.
   # geneset_id_col: set this to the unique ID associated with the geneset. I prefer the GO/kegg ID over the description because they are more reliably consistent across analysis versions and there are a couple of instances of repeated description names .
@@ -128,7 +128,7 @@ reduceKappa_wrapper = function(df, group_slice = NULL, geneset_id_col = "Geneset
     drop_na()
   cluster_info = df |> 
     distinct(cluster, cluster_id, cluster_term, !!rlang::sym(geneset_id_col), !!rlang::sym(descrip_col), cluster_size)
-  if (!is.null(group_slice)) {
+  if (!is.null(group_slice) | filter_representative) {
     if (v) message("Filtering output dataframe to include most significant category for each group within clusters.")
     new_gene_col_nm = paste0(gene_col, "_inCluster")
     genes_in_group_cluster = df |> 
