@@ -2,18 +2,22 @@
 
 The `reduceKappa_wrapper` function reduces redundant pathway enrichment
 results by clustering similar categories based on their shared genes
-using kappa scores. It selects representative terms for each cluster and
-retains relevant pathway information. The function requires information
-from four columns to perform the full clustering process: 1) unique
-geneset ID, 2) descriptive name of the geneset, 3) genes returned with
-that category, and 4) the significance of the category. Check the
-default arguments and change accordingly for your dataframe.
+using kappa scores as described in the [Metascape
+paper](https://www.nature.com/articles/s41467-019-09234-6). It selects
+representative terms for each cluster and retains relevant pathway
+information. The function requires information from four columns to
+perform the full clustering process: 1) unique geneset ID, 2)
+descriptive name of the geneset, 3) genes returned with that category,
+and 4) the significance of the category. Check the default arguments and
+change accordingly for your dataframe.
 
 There are various ways to use the function to return full or minimal
 information for further interpretation. To follow this example, read in
 the provided file. This file contains two trials of pathway enrichment,
 with the `data_label` column indicating the trial.
 
+    library(tidyverse)
+    source("fxns.R")
     pathway_res = read_tsv("pathway-res-example.txt")
 
 **Example 1: Reducing Redundant Pathways for a Single Trial**  
