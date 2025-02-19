@@ -14,6 +14,8 @@ information for further interpretation. To follow this example, read in
 the provided file. This file contains two trials of pathway enrichment,
 with the `data_label` column indicating the trial.
 
+    library(tidyverse)
+    source("fxns.R")
     pathway_res = read_tsv("pathway-res-example.txt")
 
 **Example 1: Reducing Redundant Pathways for a Single Trial**  
