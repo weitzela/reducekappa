@@ -18,7 +18,7 @@ There are various ways to use the function to return full or minimal information
 pathway_res = read_tsv("pathway-res-example.txt")
 ```
 
-**Example 1: Reducing Redundant Pathways for a Single Trial**
+**Example 1: Reducing Redundant Pathways for a Single Trial**  
 This example processes enrichment results from a single trial (identified by data_label == "G") and removes redundant pathways while keeping the most significant category per cluster as the representative term.
 ```{r}
 pathway_reduce = pathway_res |> 
@@ -33,7 +33,7 @@ attr(pathway_reduce, "cluster_info") |> head(5)
 attr(pathway_reduce, "genes_in_cluster_df") |> head(5)
 ```
 
-**Example 2: Clustering Across Multiple Trials**
+**Example 2: Clustering Across Multiple Trials**  
 To create consistent clusters across multiple pathway enrichment trials, we use all significant pathway-associated genes as input information. 
 Example of how to create clusters that apply to multiple pathway enrichment trials by using all of the genes returned by significant categories as input information. 
 ```{r}
@@ -43,7 +43,7 @@ pathway_reduce = pathway_res |>
   reduceKappa_wrapper(group_slice = "data_label", geneset_id_col = "Geneset.ID", gene_col = "Genes.Returned", sig_col = "P.value", descrip_col = "Description")
 ```
 
-**Example 3: Comparing pathway results across trials (retaining insignificant pathways in cases that any trial returns them as significant)**
+**Example 3: Comparing pathway results across trials (retaining insignificant pathways in cases that any trial returns them as significant)**  
 To compare pathway enrichment results across trials while retaining information about non-significant pathways, follow the following approach. It keeps all pathways that are significant in at least one trial, even if they are non-significant in others
 ```{r}
 pathway_reduce = pathway_res |> 

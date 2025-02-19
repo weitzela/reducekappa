@@ -14,10 +14,11 @@ with the `data_label` column indicating the trial.
 
     pathway_res = read_tsv("pathway-res-example.txt")
 
-**Example 1: Reducing Redundant Pathways for a Single Trial** This
-example processes enrichment results from a single trial (identified by
-data\_label == “G”) and removes redundant pathways while keeping the
-most significant category per cluster as the representative term.
+**Example 1: Reducing Redundant Pathways for a Single Trial**  
+This example processes enrichment results from a single trial
+(identified by data\_label == “G”) and removes redundant pathways while
+keeping the most significant category per cluster as the representative
+term.
 
     pathway_reduce = pathway_res |> 
       filter(data_label == "G", FDR < 0.05) |> 
@@ -54,12 +55,12 @@ Check out potentially helpful attributes attached to the data objects
     4 GO:0005759 mitochondrial matrix ENSRNOG00000024128
     5 GO:0005759 mitochondrial matrix ENSRNOG00000006375
 
-**Example 2: Clustering Across Multiple Trials** To create consistent
-clusters across multiple pathway enrichment trials, we use all
-significant pathway-associated genes as input information. Example of
-how to create clusters that apply to multiple pathway enrichment trials
-by using all of the genes returned by significant categories as input
-information.
+**Example 2: Clustering Across Multiple Trials**  
+To create consistent clusters across multiple pathway enrichment trials,
+we use all significant pathway-associated genes as input information.
+Example of how to create clusters that apply to multiple pathway
+enrichment trials by using all of the genes returned by significant
+categories as input information.
 
     pathway_reduce = pathway_res |> 
       filter(FDR < 0.05) |> 
@@ -68,10 +69,11 @@ information.
 
 **Example 3: Comparing pathway results across trials (retaining
 insignificant pathways in cases that any trial returns them as
-significant)** To compare pathway enrichment results across trials while
-retaining information about non-significant pathways, follow the
-following approach. It keeps all pathways that are significant in at
-least one trial, even if they are non-significant in others
+significant)**  
+To compare pathway enrichment results across trials while retaining
+information about non-significant pathways, follow the following
+approach. It keeps all pathways that are significant in at least one
+trial, even if they are non-significant in others
 
     pathway_reduce = pathway_res |> 
       # retain all categories that are significant in either "data_label" trial.
