@@ -167,7 +167,9 @@ categories as input information.
     pathway_reduce = pathway_res |> 
       filter(FDR < 0.05) |> 
       # set group_slice to retain one row per remaining signficant cluster for each group
-      reduceKappa_wrapper(group_slice = "data_label", geneset_id_col = "Geneset.ID", gene_col = "Genes.Returned", sig_col = "P.value", descrip_col = "Description")
+      reduceKappa_wrapper(group_slice = "data_label", 
+                          geneset_id_col = "Geneset.ID", gene_col = "Genes.Returned", 
+                          sig_col = "P.value", descrip_col = "Description")
 
 **Example 3: Comparing pathway results across trials (retaining
 insignificant pathways in cases that any trial returns them as
