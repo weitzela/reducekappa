@@ -1,0 +1,59 @@
+---
+title: "Use Example"
+author: "Anne Marie Weitzel"
+date: "2025-02-19"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+source("fxns.R")
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# reducekappa
+
+The `reduceKappa_wrapper` function reduces redundant pathway enrichment results by clustering similar categories based on their shared genes using kappa scores. It selects representative terms for each cluster and retains relevant pathway information. The function requires information from four columns to perform the full clustering process: 1) unique geneset ID, 2) descriptive name of the geneset, 3) genes returned with that category, and 4) the significance of the category. Check the default arguments and change accordingly for your dataframe. 
+
+There are various ways to use the function to return full or minimal information for further interpretation. To follow this example, read in the provided file. This file contains two trials of pathway enrichment, with the `data_label` column indicating the trial. 
+```{r}
+pathway_res = read_tsv("pathway-res-example.txt")
+```
+
+**Example 1: Reducing Redundant Pathways for a Single Trial**  
+This example processes enrichment results from a single trial (identified by data_label == "G") and removes redundant pathways while keeping the most significant category per cluster as the representative term. If you want to retain all results, do not include the filter_representative argument in the function call. 
+```{r}
+pathway_reduce = pathway_res |> 
+  filter(data_label == "G", FDR < 0.05) |> 
+  reduceKappa_wrapper(filter_representative = TRUE)
+```
+
+Check out potentially helpful attributes attached to the data objects
+```{r}
+attributes(pathway_reduce) |> names()
+attr(pathway_reduce, "cluster_info") |> head(5) |> knitr::kable()
+attr(pathway_reduce, "genes_in_cluster_df") |> head(5) |> knitr::kable()
+```
+
+**Example 2: Clustering Across Multiple Trials**  
+To create consistent clusters across multiple pathway enrichment trials, we use all significant pathway-associated genes as input information. 
+Example of how to create clusters that apply to multiple pathway enrichment trials by using all of the genes returned by significant categories as input information. 
+```{r}
+pathway_reduce = pathway_res |> 
+  filter(FDR < 0.05) |> 
+  # set group_slice to retain one row per remaining signficant cluster for each group
+  reduceKappa_wrapper(group_slice = "data_label", 
+                      geneset_id_col = "Geneset.ID", gene_col = "Genes.Returned", 
+                      sig_col = "P.value", descrip_col = "Description")
+```
+
+**Example 3: Comparing pathway results across trials (retaining insignificant pathways in cases that any trial returns them as significant)**  
+To compare pathway enrichment results across trials while retaining information about non-significant pathways, follow the following approach. It keeps all pathways that are significant in at least one trial, even if they are non-significant in others
+```{r}
+pathway_reduce = pathway_res |> 
+  # retain all categories that are significant in either "data_label" trial.
+  (\(x) filter(x, Geneset.ID %in% (filter(x, FDR < 0.05) |> pull(Geneset.ID))))() |> 
+  # create a new column that includes only the genes that return from significant categories
+  mutate(sig_pathway_genes = ifelse(FDR < 0.05, Genes.Returned, NA)) |> 
+  reduceKappa_wrapper(gene_col = "sig_pathway_genes") # set group_slice = "data_label" to keep the most significant category in the cluster per group
+```
