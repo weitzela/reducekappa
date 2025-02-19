@@ -11,7 +11,7 @@ source("fxns.R")
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-The `reduceKappa_wrapper` reduces redundant pathway enrichment results by clustering similar categories based on their shared genes using kappa scores. It selects representative terms for each cluster and retains relevant pathway information. The function requires information from four columns to perform the full clustering process: 1) unique geneset ID, 2) descriptive name of the geneset, 3) genes returned with that category, and 4) the significance of the category. Check the default arguments and change accordingly for your dataframe. 
+The `reduceKappa_wrapper` function reduces redundant pathway enrichment results by clustering similar categories based on their shared genes using kappa scores. It selects representative terms for each cluster and retains relevant pathway information. The function requires information from four columns to perform the full clustering process: 1) unique geneset ID, 2) descriptive name of the geneset, 3) genes returned with that category, and 4) the significance of the category. Check the default arguments and change accordingly for your dataframe. 
 
 There are various ways to use the function to return full or minimal information for further interpretation. To follow this example, read in the provided file. This file contains two trials of pathway enrichment, with the `data_label` column indicating the trial. 
 ```{r}
