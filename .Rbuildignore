@@ -1,0 +1,6 @@
+^README\.Rmd$
+^data-raw$
+^pathway-res-example\.txt$
+^\.Rproj\.user$
+^.*\.Rproj$
+^LICENSE\.md$

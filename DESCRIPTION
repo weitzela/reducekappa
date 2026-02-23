@@ -1,0 +1,31 @@
+Package: reducekappa
+Title: Reduce Redundant Pathway Enrichment Results Using Kappa Scores
+Version: 0.1.0
+Authors@R:
+    person("Anne Marie", "Weitzel", role = c("aut", "cre"),
+           email = "weitzela@umich.edu")
+Description: Clusters similar gene sets based on kappa similarity scores of
+    shared genes, as described in the Metascape paper
+    (Zhou et al. 2019 <doi:10.1038/s41467-019-09234-6>). Selects a representative
+    term for each cluster and retains relevant pathway information. Supports
+    single-trial reduction, cross-trial clustering, and comparative analysis
+    across multiple enrichment results.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Imports:
+    dplyr,
+    tidyr,
+    tibble,
+    stringr,
+    purrr,
+    rlang
+Suggests:
+    readr,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Depends:
+    R (>= 4.1.0)
+LazyData: true
