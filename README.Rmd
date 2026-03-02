@@ -9,14 +9,17 @@ output: md_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# reducekappa  
-The `reduceKappa_wrapper` function reduces redundant pathway enrichment results by clustering similar categories based on their shared genes using kappa scores as described in the [Metascape paper](https://www.nature.com/articles/s41467-019-09234-6). It selects representative terms for each cluster and retains relevant pathway information. The function requires information from four columns to perform the full clustering process: 1) unique geneset ID, 2) descriptive name of the geneset, 3) genes returned with that category, and 4) the significance of the category. Check the default arguments and change accordingly for your dataframe. 
+# reducekappa
+The `reduceKappa_wrapper` function reduces redundant pathway enrichment results by clustering similar categories based on their shared genes using kappa scores as described in the [Metascape paper](https://www.nature.com/articles/s41467-019-09234-6). It selects representative terms for each cluster and retains relevant pathway information. The function requires information from four columns to perform the full clustering process: 1) unique geneset ID, 2) descriptive name of the geneset, 3) genes returned with that category, and 4) the significance of the category. Check the default arguments and change accordingly for your dataframe.
 
-There are various ways to use the function to return full or minimal information for further interpretation. To follow this example, read in the provided file. This file contains two trials of pathway enrichment, with the `data_label` column indicating the trial. 
-```{r}
-library(tidyverse)
-source("fxns.R")
-pathway_res = read_tsv("pathway-res-example.txt")
+There are various ways to use the function to return full or minimal information for further interpretation. To follow this example, use the package data file `pathway_res`. This file contains two trials of pathway enrichment, with the `data_label` column indicating the trial.
+```{r, message=FALSE}
+# install.packages("pak")
+# pak::pak("weitzela/reducekappa")
+
+library(reducekappa)
+library(dplyr)
+data(pathway_res)
 ```
 
 **Example 1: Reducing Redundant Pathways for a Single Trial**  
@@ -25,6 +28,10 @@ This example processes enrichment results from a single trial (identified by dat
 pathway_reduce = pathway_res |> 
   filter(data_label == "G", FDR < 0.05) |> 
   reduceKappa_wrapper(filter_representative = TRUE)
+pathway_reduce |> 
+  head(5) |> 
+  mutate(across(matches("Genes.|sig_"), ~ stringr::str_trunc(.x, 15))) |> 
+  knitr::kable()
 ```
 
 Check out potentially helpful attributes attached to the data objects
@@ -44,6 +51,10 @@ pathway_reduce = pathway_res |>
   reduceKappa_wrapper(group_slice = "data_label", 
                       geneset_id_col = "Geneset.ID", gene_col = "Genes.Returned", 
                       sig_col = "P.value", descrip_col = "Description")
+pathway_reduce |> 
+  slice_head(n = 3, by = "data_label") |> 
+  mutate(across(matches("Genes.|sig_"), ~ stringr::str_trunc(.x, 15))) |> 
+  knitr::kable()
 ```
 
 **Example 3: Comparing pathway results across trials (retaining insignificant pathways in cases that any trial returns them as significant)**  
@@ -54,5 +65,26 @@ pathway_reduce = pathway_res |>
   (\(x) filter(x, Geneset.ID %in% (filter(x, FDR < 0.05) |> pull(Geneset.ID))))() |> 
   # create a new column that includes only the genes that return from significant categories
   mutate(sig_pathway_genes = ifelse(FDR < 0.05, Genes.Returned, NA)) |> 
-  reduceKappa_wrapper(gene_col = "sig_pathway_genes") # set group_slice = "data_label" to keep the most significant category in the cluster per group
+  reduceKappa_wrapper(gene_col = "sig_pathway_genes")
+
+pathway_reduce |> 
+  head(5) |> 
+  mutate(across(matches("Genes.|sig_"), ~ stringr::str_trunc(.x, 15))) |> 
+  knitr::kable()
 ```
+
+```{r}
+# set group_slice = "data_label" to keep the most significant category in the cluster per group
+pathway_reduce = pathway_res |> 
+  # retain all categories that are significant in either "data_label" trial.
+  (\(x) filter(x, Geneset.ID %in% (filter(x, FDR < 0.05) |> pull(Geneset.ID))))() |> 
+  # create a new column that includes only the genes that return from significant categories
+  mutate(sig_pathway_genes = ifelse(FDR < 0.05, Genes.Returned, NA)) |> 
+  reduceKappa_wrapper(gene_col = "sig_pathway_genes", group_slice = "data_label")
+
+pathway_reduce |> 
+  slice_head(n = 3, by = "data_label") |> 
+  mutate(across(matches("Genes.|sig_"), ~ stringr::str_trunc(.x, 15))) |> 
+  knitr::kable()
+```
+
