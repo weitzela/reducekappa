@@ -21,11 +21,7 @@ library(dplyr)
 data(pathway_res)
 ```
 
-The bundled `pathway_res` data frame contains two trials of pathway enrichment, with the `data_label` column indicating the trial. A larger example file is also available at:
-
-```{r, eval=FALSE}
-system.file("extdata", "pathway-res-example.txt", package = "reducekappa")
-```
+The bundled `pathway_res` data frame contains two trials of pathway enrichment, with the `data_label` column indicating the trial. A larger example file (`pathway-res-example.txt`) is available in the package repository.
 
 ---
 

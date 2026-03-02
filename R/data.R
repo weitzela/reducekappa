@@ -17,6 +17,6 @@
 #'   \item{`FDR`}{Numeric. False discovery rate-adjusted p-value.}
 #' }
 #'
-#' @source Subset of `inst/extdata/pathway-res-example.txt`, created via
-#'   `data-raw/pathway_res.R`.
+#' @source Subset of `pathway-res-example.txt` (available in the package
+#'   repository), created via `data-raw/pathway_res.R`.
 "pathway_res"
