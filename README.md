@@ -36,21 +36,21 @@ filter\_representative argument in the function call.
     pathway_reduce |> 
       head(5) |> 
       mutate(across(matches("Genes.|sig_"), ~ stringr::str_trunc(.x, 15))) |> 
-      knitr::kable()
+      knitr::kable(digits = 100)
 
 <table>
 <colgroup>
-<col style="width: 6%" />
+<col style="width: 5%" />
 <col style="width: 4%" />
+<col style="width: 5%" />
+<col style="width: 19%" />
 <col style="width: 6%" />
-<col style="width: 20%" />
-<col style="width: 7%" />
-<col style="width: 6%" />
-<col style="width: 20%" />
+<col style="width: 5%" />
+<col style="width: 19%" />
 <col style="width: 8%" />
-<col style="width: 4%" />
-<col style="width: 2%" />
-<col style="width: 13%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 12%" />
 </colgroup>
 <thead>
 <tr>
@@ -79,8 +79,8 @@ class="uri">GO:0005759</a></td>
 class="uri">GO:0005759</a></td>
 <td style="text-align: left;">mitochondrial matrix</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.911564e-47</td>
+<td style="text-align: right;">1.211932e-44</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
 <tr>
@@ -94,8 +94,8 @@ class="uri">GO:0016054</a></td>
 class="uri">GO:0016054</a></td>
 <td style="text-align: left;">organic acid catabolic process</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">4.398785e-24</td>
+<td style="text-align: right;">2.266694e-20</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
 <tr>
@@ -109,8 +109,8 @@ class="uri">GO:0045333</a></td>
 class="uri">GO:0045333</a></td>
 <td style="text-align: left;">cellular respiration</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">2.807665e-17</td>
+<td style="text-align: right;">4.822633e-14</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
 <tr>
@@ -124,8 +124,8 @@ class="uri">GO:0007005</a></td>
 class="uri">GO:0007005</a></td>
 <td style="text-align: left;">mitochondrion organization</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">2.340259e-13</td>
+<td style="text-align: right;">1.004946e-10</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
 <tr>
@@ -139,8 +139,8 @@ class="uri">GO:0009063</a></td>
 class="uri">GO:0009063</a></td>
 <td style="text-align: left;">cellular amino acid catabolic process</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">3.334101e-11</td>
+<td style="text-align: right;">1.010625e-08</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
 </tbody>
@@ -290,20 +290,20 @@ categories as input information.
     pathway_reduce |> 
       slice_head(n = 3, by = "data_label") |> 
       mutate(across(matches("Genes.|sig_"), ~ stringr::str_trunc(.x, 15))) |> 
-      knitr::kable()
+      knitr::kable(digits = 100)
 
 <table>
 <colgroup>
-<col style="width: 5%" />
+<col style="width: 4%" />
 <col style="width: 3%" />
+<col style="width: 4%" />
+<col style="width: 23%" />
 <col style="width: 5%" />
-<col style="width: 24%" />
-<col style="width: 6%" />
-<col style="width: 5%" />
-<col style="width: 24%" />
+<col style="width: 4%" />
+<col style="width: 23%" />
 <col style="width: 7%" />
-<col style="width: 3%" />
-<col style="width: 1%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
 <col style="width: 11%" />
 </colgroup>
 <thead>
@@ -335,8 +335,8 @@ class="uri">GO:0007606</a></td>
 <td style="text-align: left;">sensory perception of chemical
 stimulus</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">7.134595e-21</td>
+<td style="text-align: right;">3.616526e-17</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
 <tr>
@@ -352,8 +352,8 @@ class="uri">GO:0050906</a></td>
 <td style="text-align: left;">detection of stimulus involved in sensory
 perception</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">3.733342e-20</td>
+<td style="text-align: right;">9.462156e-17</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
 <tr>
@@ -367,8 +367,8 @@ class="uri">GO:0015629</a></td>
 class="uri">GO:0015629</a></td>
 <td style="text-align: left;">actin cytoskeleton</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.174869e-12</td>
+<td style="text-align: right;">4.248438e-10</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
 <tr>
@@ -382,8 +382,8 @@ class="uri">GO:0005759</a></td>
 class="uri">GO:0005759</a></td>
 <td style="text-align: left;">mitochondrial matrix</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.911564e-47</td>
+<td style="text-align: right;">1.211932e-44</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
 <tr>
@@ -397,8 +397,8 @@ class="uri">GO:0016054</a></td>
 class="uri">GO:0016054</a></td>
 <td style="text-align: left;">organic acid catabolic process</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">4.398785e-24</td>
+<td style="text-align: right;">2.266694e-20</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
 <tr>
@@ -412,8 +412,8 @@ class="uri">GO:0045333</a></td>
 class="uri">GO:0045333</a></td>
 <td style="text-align: left;">cellular respiration</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">2.807665e-17</td>
+<td style="text-align: right;">4.822633e-14</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
 </tbody>
@@ -437,20 +437,20 @@ trial, even if they are non-significant in others
     pathway_reduce |> 
       head(5) |> 
       mutate(across(matches("Genes.|sig_"), ~ stringr::str_trunc(.x, 15))) |> 
-      knitr::kable()
+      knitr::kable(digits = 100)
 
-<table style="width:100%;">
+<table>
 <colgroup>
 <col style="width: 5%" />
 <col style="width: 3%" />
 <col style="width: 5%" />
-<col style="width: 25%" />
-<col style="width: 6%" />
+<col style="width: 24%" />
 <col style="width: 5%" />
-<col style="width: 25%" />
+<col style="width: 5%" />
+<col style="width: 24%" />
 <col style="width: 7%" />
-<col style="width: 3%" />
-<col style="width: 1%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
 <col style="width: 8%" />
 </colgroup>
 <thead>
@@ -482,8 +482,8 @@ class="uri">GO:0007606</a></td>
 <td style="text-align: left;">sensory perception of chemical
 stimulus</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">7.134595e-21</td>
+<td style="text-align: right;">3.616526e-17</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
 <tr>
@@ -499,8 +499,8 @@ class="uri">GO:0050906</a></td>
 <td style="text-align: left;">detection of stimulus involved in sensory
 perception</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">3.733342e-20</td>
+<td style="text-align: right;">9.462156e-17</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
 <tr>
@@ -514,8 +514,8 @@ stimulus</td>
 <td style="text-align: left;">hsa04740</td>
 <td style="text-align: left;">Olfactory transduction</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">9.081453e-17</td>
+<td style="text-align: right;">1.680069e-14</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
 <tr>
@@ -530,8 +530,8 @@ stimulus</td>
 class="uri">GO:0007608</a></td>
 <td style="text-align: left;">sensory perception of smell</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">5.624818e-17</td>
+<td style="text-align: right;">9.504067e-14</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
 <tr>
@@ -545,8 +545,8 @@ class="uri">GO:0015629</a></td>
 class="uri">GO:0015629</a></td>
 <td style="text-align: left;">actin cytoskeleton</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.174869e-12</td>
+<td style="text-align: right;">4.248438e-10</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
 </tbody>
@@ -563,20 +563,20 @@ class="uri">GO:0015629</a></td>
     pathway_reduce |> 
       slice_head(n = 3, by = "data_label") |> 
       mutate(across(matches("Genes.|sig_"), ~ stringr::str_trunc(.x, 15))) |> 
-      knitr::kable()
+      knitr::kable(digits = 100)
 
 <table>
 <colgroup>
 <col style="width: 4%" />
 <col style="width: 3%" />
 <col style="width: 4%" />
-<col style="width: 22%" />
+<col style="width: 21%" />
 <col style="width: 5%" />
 <col style="width: 4%" />
-<col style="width: 22%" />
+<col style="width: 21%" />
 <col style="width: 6%" />
-<col style="width: 3%" />
-<col style="width: 1%" />
+<col style="width: 5%" />
+<col style="width: 5%" />
 <col style="width: 7%" />
 <col style="width: 11%" />
 </colgroup>
@@ -610,8 +610,8 @@ class="uri">GO:0007606</a></td>
 <td style="text-align: left;">sensory perception of chemical
 stimulus</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">7.134595e-21</td>
+<td style="text-align: right;">3.616526e-17</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
@@ -628,8 +628,8 @@ class="uri">GO:0050906</a></td>
 <td style="text-align: left;">detection of stimulus involved in sensory
 perception</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">3.733342e-20</td>
+<td style="text-align: right;">9.462156e-17</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
@@ -644,8 +644,8 @@ class="uri">GO:0015629</a></td>
 class="uri">GO:0015629</a></td>
 <td style="text-align: left;">actin cytoskeleton</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.174869e-12</td>
+<td style="text-align: right;">4.248438e-10</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
@@ -660,8 +660,8 @@ class="uri">GO:0005759</a></td>
 class="uri">GO:0005759</a></td>
 <td style="text-align: left;">mitochondrial matrix</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.911564e-47</td>
+<td style="text-align: right;">1.211932e-44</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
@@ -676,8 +676,8 @@ class="uri">GO:0016054</a></td>
 class="uri">GO:0016054</a></td>
 <td style="text-align: left;">organic acid catabolic process</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">4.398785e-24</td>
+<td style="text-align: right;">2.266694e-20</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
@@ -692,8 +692,8 @@ class="uri">GO:0045333</a></td>
 class="uri">GO:0045333</a></td>
 <td style="text-align: left;">cellular respiration</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: right;">2.807665e-17</td>
+<td style="text-align: right;">4.822633e-14</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 <td style="text-align: left;">ENSRNOG00000…</td>
 </tr>
