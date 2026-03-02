@@ -56,10 +56,13 @@
 #' @param collapse_small_clusters Logical. If `TRUE`, clusters with fewer than
 #'   2 members are merged into the nearest larger cluster based on average kappa
 #'   similarity. Use with caution. Default `FALSE`.
+#' @param hclust_cutoff Numeric. Height at which to cut the hierarchical
+#'   clustering dendrogram to define clusters. Default `0.7`, as described in
+#'   the [Metascape paper](https://www.nature.com/articles/s41467-019-09234-6).
 #'
 #' @return A named integer vector: names are the unique values from the first
 #'   column of `df` and values are integer cluster assignments from hierarchical
-#'   clustering cut at `h = 0.7`.
+#'   clustering cut at `h = hclust_cutoff`.
 #'
 #' @export
 #'
@@ -76,7 +79,7 @@
 #'
 #' clusters = reduceKappa(gene_long)
 #' head(clusters)
-reduceKappa = function(df, collapse_small_clusters = FALSE) {
+reduceKappa = function(df, collapse_small_clusters = FALSE, hclust_cutoff = 0.7) {
   mat = df |>
     dplyr::select(1:2) |>
     `colnames<-`(c("terms_to_summarize", "supporting_info")) |>
@@ -94,7 +97,7 @@ reduceKappa = function(df, collapse_small_clusters = FALSE) {
 
   k = .kappaMatrix(mat)
   hc = hclust(.kappa2dist(k), method = "average")
-  clusters = cutree(hc, h = 0.7)
+  clusters = cutree(hc, h = hclust_cutoff)
 
   if (collapse_small_clusters) {
     small_clusters = names(table(clusters)[table(clusters) < 2])
