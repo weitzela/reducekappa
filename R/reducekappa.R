@@ -44,11 +44,15 @@
 #' approach described in the
 #' [Metascape paper](https://www.nature.com/articles/s41467-019-09234-6).
 #'
-#' @param df A data frame whose **first two columns** define the variables to
-#'   cluster and their characteristics. The first column should be the variable
-#'   to summarise (e.g. geneset ID) and the second column should be the
-#'   supporting feature (e.g. gene ID). Similarity between first-column entries
-#'   is computed based on overlap in second-column values.
+#' This is the most flexible of the two functions — it returns cluster
+#' assignments as a named vector that you can use however you like in your own
+#' analysis. See [reduceKappa_wrapper()] for a higher-level function that takes
+#' a full enrichment results table and returns it annotated with cluster
+#' information.
+#'
+#' @param df A two-column data frame with geneset IDs in the first column and
+#'   genes or proteins in the second column, with one gene per row. Cluster
+#'   similarity is calculated based on overlap in gene members across genesets.
 #' @param collapse_small_clusters Logical. If `TRUE`, clusters with fewer than
 #'   2 members are merged into the nearest larger cluster based on average kappa
 #'   similarity. Use with caution. Default `FALSE`.
@@ -121,10 +125,10 @@ reduceKappa = function(df, collapse_small_clusters = FALSE) {
 
 #' Reduce and annotate pathway enrichment results
 #'
-#' A complete pipeline for reducing redundant pathway enrichment results. Gene
-#' sets are clustered by kappa similarity (see [reduceKappa()]), a representative
-#' term is selected per cluster based on significance, and cluster annotations
-#' are added to the input data frame. Additional summary information is attached
+#' Takes an enrichment results table and returns the same table annotated with
+#' cluster information. Gene sets are clustered by kappa similarity
+#' (see [reduceKappa()]), and each cluster is named after the pathway with the
+#' lowest p-value in that cluster. Additional summary information is attached
 #' as attributes.
 #'
 #' @param df A data frame of pathway enrichment results. Must contain columns
@@ -135,7 +139,10 @@ reduceKappa = function(df, collapse_small_clusters = FALSE) {
 #' @param geneset_id_col Name of the column containing unique geneset IDs.
 #'   Default `"Geneset.ID"`.
 #' @param gene_col Name of the column containing genes associated with each
-#'   geneset, listed as a delimited string. Default `"Genes.Returned"`.
+#'   geneset, listed as a single character string with entries separated by
+#'   a space or punctuation mark (e.g. `", "` or `"/"`). Default `"Genes.Returned"`. **Note:**
+#'   only genes associated with *significant* genesets should be included as
+#'   supporting information to cluster pathways.
 #' @param sig_col Name of the column used to select the representative term
 #'   within each cluster (smallest value = most significant). Default
 #'   `"P.value"`. See also `rev_sig`.
