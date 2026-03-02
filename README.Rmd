@@ -31,7 +31,7 @@ pathway_reduce = pathway_res |>
 pathway_reduce |> 
   head(5) |> 
   mutate(across(matches("Genes.|sig_"), ~ stringr::str_trunc(.x, 15))) |> 
-  knitr::kable()
+  knitr::kable(digits = 100)
 ```
 
 Check out potentially helpful attributes attached to the data objects
@@ -54,7 +54,7 @@ pathway_reduce = pathway_res |>
 pathway_reduce |> 
   slice_head(n = 3, by = "data_label") |> 
   mutate(across(matches("Genes.|sig_"), ~ stringr::str_trunc(.x, 15))) |> 
-  knitr::kable()
+  knitr::kable(digits = 100)
 ```
 
 **Example 3: Comparing pathway results across trials (retaining insignificant pathways in cases that any trial returns them as significant)**  
@@ -70,7 +70,7 @@ pathway_reduce = pathway_res |>
 pathway_reduce |> 
   head(5) |> 
   mutate(across(matches("Genes.|sig_"), ~ stringr::str_trunc(.x, 15))) |> 
-  knitr::kable()
+  knitr::kable(digits = 100)
 ```
 
 ```{r}
@@ -85,6 +85,6 @@ pathway_reduce = pathway_res |>
 pathway_reduce |> 
   slice_head(n = 3, by = "data_label") |> 
   mutate(across(matches("Genes.|sig_"), ~ stringr::str_trunc(.x, 15))) |> 
-  knitr::kable()
+  knitr::kable(digits = 100)
 ```
 
