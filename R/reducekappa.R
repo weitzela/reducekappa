@@ -5,33 +5,33 @@
 
 # Internal helpers ------------------------------------------------------------
 
-.probX <- function(binary_mat) {
+.probX = function(binary_mat) {
   # input: columns = geneset, rows = 1/0 indicating presence of gene in geneset
-  t1 <- binary_mat |>
+  t1 = binary_mat |>
     (\(x) matrix(
       rep(colSums(x), ncol(x)),
       ncol = ncol(x), nrow = ncol(x),
       byrow = TRUE, dimnames = list(c(), colnames(x))
     ))()
-  t2 <- t(t1)
+  t2 = t(t1)
   (t1 / nrow(binary_mat)) * (t2 / nrow(binary_mat))
 }
 
-.kappaMatrix <- function(mat) {
+.kappaMatrix = function(mat) {
   # input: binary matrix where geneset term IDs are columns and genes are rows.
   # 1 indicates presence of gene in geneset.
-  inverse_mat <- 1 - mat
-  p_observed_agreement <- ((t(mat) %*% mat) + (t(inverse_mat) %*% inverse_mat)) / nrow(mat)
-  p_chance <- .probX(mat) + .probX(inverse_mat)
+  inverse_mat = 1 - mat
+  p_observed_agreement = ((t(mat) %*% mat) + (t(inverse_mat) %*% inverse_mat)) / nrow(mat)
+  p_chance = .probX(mat) + .probX(inverse_mat)
   (p_observed_agreement - p_chance) / (1 - p_chance)
 }
 
-.kappa2dist <- function(k) {
+.kappa2dist = function(k) {
   # Negative k values (observed overlap less than expected by chance) are scaled
   # to 0-1 before converting to a distance object (which must range 0-1).
-  min_k <- min(k, na.rm = TRUE)
-  max_k <- max(k, na.rm = TRUE)
-  k <- (k - min_k) / (max_k - min_k)
+  min_k = min(k, na.rm = TRUE)
+  max_k = max(k, na.rm = TRUE)
+  k = (k - min_k) / (max_k - min_k)
   as.dist(1 - k)
 }
 
@@ -65,15 +65,15 @@
 #' data(pathway_res)
 #'
 #' # Build a long gene-per-row table for one trial
-#' gene_long <- pathway_res |>
+#' gene_long = pathway_res |>
 #'   filter(data_label == "G", FDR < 0.05) |>
 #'   select(Geneset.ID, Genes.Returned) |>
 #'   separate_longer_delim(Genes.Returned, delim = ", ")
 #'
-#' clusters <- reduceKappa(gene_long)
+#' clusters = reduceKappa(gene_long)
 #' head(clusters)
-reduceKappa <- function(df, collapse_small_clusters = FALSE) {
-  mat <- df |>
+reduceKappa = function(df, collapse_small_clusters = FALSE) {
+  mat = df |>
     dplyr::select(1:2) |>
     `colnames<-`(c("terms_to_summarize", "supporting_info")) |>
     tidyr::drop_na() |>
@@ -88,14 +88,14 @@ reduceKappa <- function(df, collapse_small_clusters = FALSE) {
     tibble::column_to_rownames(var = "supporting_info") |>
     as.matrix()
 
-  k <- .kappaMatrix(mat)
-  hc <- hclust(.kappa2dist(k), method = "average")
-  clusters <- cutree(hc, h = 0.7)
+  k = .kappaMatrix(mat)
+  hc = hclust(.kappa2dist(k), method = "average")
+  clusters = cutree(hc, h = 0.7)
 
   if (collapse_small_clusters) {
-    small_clusters <- names(table(clusters)[table(clusters) < 2])
-    variables_in_small_clusters <- names(clusters[clusters %in% as.numeric(small_clusters)])
-    new_cluster_assignments <- k |>
+    small_clusters = names(table(clusters)[table(clusters) < 2])
+    variables_in_small_clusters = names(clusters[clusters %in% as.numeric(small_clusters)])
+    new_cluster_assignments = k |>
       as.data.frame() |>
       tibble::rownames_to_column(var = "geneset") |>
       dplyr::mutate(cluster = clusters[.data$geneset], .after = "geneset") |>
@@ -109,8 +109,8 @@ reduceKappa <- function(df, collapse_small_clusters = FALSE) {
       dplyr::arrange(.data$cluster) |>
       dplyr::slice_min(.data$avg_dist, n = 1, with_ties = FALSE) |>
       dplyr::pull("cluster", name = "small_cluster_variables")
-    clusters[names(new_cluster_assignments)] <- unname(new_cluster_assignments)
-    clusters <- purrr::set_names(
+    clusters[names(new_cluster_assignments)] = unname(new_cluster_assignments)
+    clusters = purrr::set_names(
       dplyr::dense_rank(clusters),
       names(clusters)
     )
@@ -174,7 +174,7 @@ reduceKappa <- function(df, collapse_small_clusters = FALSE) {
 #' data(pathway_res)
 #'
 #' # Example 1: Reduce a single trial, keep only representative terms
-#' reduced <- pathway_res |>
+#' reduced = pathway_res |>
 #'   filter(data_label == "G", FDR < 0.05) |>
 #'   reduceKappa_wrapper(filter_representative = TRUE)
 #'
@@ -182,10 +182,10 @@ reduceKappa <- function(df, collapse_small_clusters = FALSE) {
 #' attr(reduced, "n_reduced_terms")
 #'
 #' # Example 2: Cross-trial clustering retaining one term per group per cluster
-#' reduced_multi <- pathway_res |>
+#' reduced_multi = pathway_res |>
 #'   filter(FDR < 0.05) |>
 #'   reduceKappa_wrapper(group_slice = "data_label")
-reduceKappa_wrapper <- function(
+reduceKappa_wrapper = function(
     df,
     group_slice = NULL,
     geneset_id_col = "Geneset.ID",
@@ -197,12 +197,12 @@ reduceKappa_wrapper <- function(
     v = FALSE,
     filter_representative = FALSE) {
 
-  df <- dplyr::ungroup(df)
-  n_og_terms <- length(unique(df[[geneset_id_col]]))
+  df = dplyr::ungroup(df)
+  n_og_terms = length(unique(df[[geneset_id_col]]))
 
   if (n_og_terms < 2) {
     message(n_og_terms, " term", ifelse(n_og_terms == 0, "s", ""), ": not enough to cluster.")
-    df <- df |>
+    df = df |>
       dplyr::mutate(
         cluster = NA,
         cluster_id = !!rlang::sym(geneset_id_col),
@@ -216,29 +216,29 @@ reduceKappa_wrapper <- function(
   }
 
   if (is.null(delim)) {
-    delim <- grep("[[:punct:]]|[[:space:]]", df[[gene_col]], value = TRUE)[1] |>
+    delim = grep("[[:punct:]]|[[:space:]]", df[[gene_col]], value = TRUE)[1] |>
       stringr::str_remove("[:alnum:]+(?=[:punct:]|[:space:])") |>
       stringr::str_remove("(?<=[:punct:]|[:space:])[:alnum:].*$")
     if (is.na(delim)) {
       warning("could not automatically detect deliminator, setting delim = ', '")
-      delim <- ", "
+      delim = ", "
     }
     if (v) message("detected '", delim, "' as the gene deliminator")
   }
 
-  clusters <- df |>
+  clusters = df |>
     dplyr::select(dplyr::all_of(c(geneset_id_col, gene_col))) |>
     tidyr::separate_longer_delim(!!rlang::sym(gene_col), delim) |>
     reduceKappa()
 
   if (rev_sig) {
-    negLog10 <- ifelse(all(df[[sig_col]] >= 0), -1, 1)
-    df <- df |>
+    negLog10 = ifelse(all(df[[sig_col]] >= 0), -1, 1)
+    df = df |>
       dplyr::mutate(tmp_sig = 10^(negLog10 * !!rlang::sym(sig_col)))
-    sig_col <- "tmp_sig"
+    sig_col = "tmp_sig"
   }
 
-  df <- df |>
+  df = df |>
     dplyr::mutate(og_idx = dplyr::row_number()) |>
     dplyr::mutate(cluster = clusters[!!rlang::sym(geneset_id_col)], .before = !!rlang::sym(geneset_id_col)) |>
     dplyr::group_by(.data$cluster) |>
@@ -251,14 +251,14 @@ reduceKappa_wrapper <- function(
     tidyr::fill("cluster_id", "cluster_term") |>
     dplyr::mutate(cluster_size = length(unique(!!rlang::sym(geneset_id_col))), .after = "cluster_term")
 
-  genes_in_cluster <- df |>
+  genes_in_cluster = df |>
     dplyr::ungroup() |>
     dplyr::select("cluster_id", "cluster_term", dplyr::all_of(gene_col)) |>
     tidyr::separate_longer_delim(!!rlang::sym(gene_col), delim) |>
     dplyr::distinct() |>
     tidyr::drop_na()
 
-  cluster_info <- df |>
+  cluster_info = df |>
     dplyr::distinct(
       .data$cluster, .data$cluster_id, .data$cluster_term,
       !!rlang::sym(geneset_id_col), !!rlang::sym(descrip_col),
@@ -267,8 +267,8 @@ reduceKappa_wrapper <- function(
 
   if (!is.null(group_slice) || filter_representative) {
     if (v) message("Filtering output dataframe to include most significant category for each group within clusters.")
-    new_gene_col_nm <- paste0(gene_col, "_inCluster")
-    genes_in_group_cluster <- df |>
+    new_gene_col_nm = paste0(gene_col, "_inCluster")
+    genes_in_group_cluster = df |>
       dplyr::ungroup() |>
       dplyr::select("cluster_id", "cluster_term", dplyr::all_of(group_slice), dplyr::all_of(gene_col)) |>
       tidyr::separate_longer_delim(!!rlang::sym(gene_col), delim) |>
@@ -276,18 +276,18 @@ reduceKappa_wrapper <- function(
       tidyr::drop_na() |>
       dplyr::group_by(.data$cluster_id, .data$cluster_term, dplyr::across(dplyr::all_of(group_slice))) |>
       dplyr::summarise("{new_gene_col_nm}" := paste0(!!rlang::sym(gene_col), collapse = delim), .groups = "drop")
-    df <- df |>
+    df = df |>
       dplyr::group_by(dplyr::across(dplyr::all_of(c("cluster", group_slice)))) |>
       dplyr::slice_min(!!rlang::sym(sig_col), n = 1, with_ties = FALSE) |>
       dplyr::left_join(genes_in_group_cluster, by = c("cluster_id", "cluster_term", group_slice))
   }
 
-  df <- df |>
+  df = df |>
     dplyr::arrange(.data$og_idx) |>
     dplyr::select(-dplyr::any_of(c("og_idx", "tmp_sig"))) |>
     dplyr::ungroup()
 
-  n_reduced_terms <- length(unique(df[["cluster_id"]]))
+  n_reduced_terms = length(unique(df[["cluster_id"]]))
 
   df |>
     `attr<-`("n_og_terms", n_og_terms) |>
