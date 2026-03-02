@@ -29,7 +29,10 @@ the most significant term per cluster per group. Default \code{NULL}.}
 Default \code{"Geneset.ID"}.}
 
 \item{gene_col}{Name of the column containing genes associated with each
-geneset, listed as a delimited string. Default \code{"Genes.Returned"}.}
+geneset, listed as a single character string with entries separated by
+a space or punctuation mark (e.g. \code{", "} or \code{"/"}). Default \code{"Genes.Returned"}. \strong{Note:}
+only genes associated with \emph{significant} genesets should be included as
+supporting information to cluster pathways.}
 
 \item{sig_col}{Name of the column used to select the representative term
 within each cluster (smallest value = most significant). Default
@@ -69,10 +72,10 @@ The following attributes are attached to the returned data frame:
 }
 }
 \description{
-A complete pipeline for reducing redundant pathway enrichment results. Gene
-sets are clustered by kappa similarity (see \code{\link[=reduceKappa]{reduceKappa()}}), a representative
-term is selected per cluster based on significance, and cluster annotations
-are added to the input data frame. Additional summary information is attached
+Takes an enrichment results table and returns the same table annotated with
+cluster information. Gene sets are clustered by kappa similarity
+(see \code{\link[=reduceKappa]{reduceKappa()}}), and each cluster is named after the pathway with the
+lowest p-value in that cluster. Additional summary information is attached
 as attributes.
 }
 \examples{
@@ -80,7 +83,7 @@ library(dplyr)
 data(pathway_res)
 
 # Example 1: Reduce a single trial, keep only representative terms
-reduced <- pathway_res |>
+reduced = pathway_res |>
   filter(data_label == "G", FDR < 0.05) |>
   reduceKappa_wrapper(filter_representative = TRUE)
 
@@ -88,7 +91,7 @@ attr(reduced, "n_og_terms")
 attr(reduced, "n_reduced_terms")
 
 # Example 2: Cross-trial clustering retaining one term per group per cluster
-reduced_multi <- pathway_res |>
+reduced_multi = pathway_res |>
   filter(FDR < 0.05) |>
   reduceKappa_wrapper(group_slice = "data_label")
 }

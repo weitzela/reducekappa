@@ -19,8 +19,8 @@ associated with the gene set in this enrichment result.}
 }
 }
 \source{
-Subset of \code{inst/extdata/pathway-res-example.txt}, created via
-\code{data-raw/pathway_res.R}.
+Subset of \code{pathway-res-example.txt} (available in the package
+repository), created via \code{data-raw/pathway_res.R}.
 }
 \usage{
 pathway_res
