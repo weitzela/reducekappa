@@ -4,6 +4,22 @@
 # https://metascape.org/blog/?p=252
 
 # Internal helpers ------------------------------------------------------------
+.buildBinaryMatrix = function(df) {
+  df |>
+    dplyr::select(1:2) |>
+    `colnames<-`(c("terms_to_summarize", "supporting_info")) |>
+    tidyr::drop_na() |>
+    dplyr::distinct() |>
+    dplyr::mutate(value = 1) |>
+    tidyr::pivot_wider(
+      id_cols = "supporting_info",
+      names_from = "terms_to_summarize",
+      values_from = "value",
+      values_fill = 0
+    ) |>
+    tibble::column_to_rownames(var = "supporting_info") |>
+    as.matrix()
+}
 
 .probX = function(binary_mat) {
   # input: columns = geneset, rows = 1/0 indicating presence of gene in geneset
@@ -26,13 +42,19 @@
   (p_observed_agreement - p_chance) / (1 - p_chance)
 }
 
-.kappa2dist = function(k) {
+.kappa2dist = function(k, min_max_norm = FALSE) {
   # Negative k values (observed overlap less than expected by chance) are scaled
   # to 0-1 before converting to a distance object (which must range 0-1).
+  # min_max_norm: set TRUE for cases where you want to view a dendrogram of an 
+  # shared features between already reduced dataset
   min_k = min(k, na.rm = TRUE)
   max_k = max(k, na.rm = TRUE)
   k = (k - min_k) / (max_k - min_k)
-  as.dist(1 - k)
+  d = as.dist(1 - k)
+  if (min_max_norm) {
+    d = d - (floor(min(d) * 100)) / 100
+  }
+  d
 }
 
 # Exported functions ----------------------------------------------------------
@@ -80,20 +102,7 @@
 #' clusters = reduceKappa(gene_long)
 #' head(clusters)
 reduceKappa = function(df, collapse_small_clusters = FALSE, hclust_cutoff = 0.7) {
-  mat = df |>
-    dplyr::select(1:2) |>
-    `colnames<-`(c("terms_to_summarize", "supporting_info")) |>
-    tidyr::drop_na() |>
-    dplyr::distinct() |>
-    dplyr::mutate(value = 1) |>
-    tidyr::pivot_wider(
-      id_cols = "supporting_info",
-      names_from = "terms_to_summarize",
-      values_from = "value",
-      values_fill = 0
-    ) |>
-    tibble::column_to_rownames(var = "supporting_info") |>
-    as.matrix()
+  mat = .buildBinaryMatrix(df)
 
   k = .kappaMatrix(mat)
   hc = hclust(.kappa2dist(k), method = "average")
@@ -123,6 +132,85 @@ reduceKappa = function(df, collapse_small_clusters = FALSE, hclust_cutoff = 0.7)
     )
   }
   clusters
+}
+
+
+#' Hierarchical clustering of gene sets by kappa similarity
+#'
+#' Computes pairwise kappa similarity scores between gene sets and returns an
+#' `hclust` object, suitable for use as a dendrogram alongside a heatmap. This
+#' is a lower-level alternative to [reduceKappa()] for when you need the full
+#' clustering object rather than cut cluster assignments.
+#'
+#' @param df A data frame with geneset IDs in one column and genes associated
+#'   with each geneset in another column, listed as a single character string
+#'   with entries separated by a delimiter (e.g. `", "` or `"/"`). If `df` has
+#'   exactly two columns they are used directly (first = geneset IDs, second =
+#'   genes). If `df` has more columns, both `geneset_id_col` and `gene_col`
+#'   must be specified.
+#' @param geneset_id_col Name of the column containing unique geneset IDs.
+#'   Required when `df` has more than two columns.
+#' @param gene_col Name of the column containing delimited gene strings.
+#'   Required when `df` has more than two columns.
+#' @param delim Delimiter separating genes in `gene_col`. If `NULL` (default),
+#'   the delimiter is auto-detected. Falls back to `", "` if detection fails.
+#' @param min_max_norm Logical. If `TRUE`, the distance matrix is min-max
+#'   normalized before clustering. Useful when visualizing a dendrogram of an
+#'   already-reduced dataset. Default `FALSE`.
+#' @param v Logical. Print progress messages. Default `FALSE`.
+#'
+#' @return An `hclust` object (average linkage) that can be passed directly to
+#'   [as.dendrogram()], `pheatmap`, `ComplexHeatmap`, etc.
+#'
+#' @export
+#'
+#' @examples
+#' library(dplyr)
+#' data(pathway_res)
+#'
+#' hc = pathway_res |>
+#'   filter(data_label == "G", FDR < 0.05) |>
+#'   hclustKappa(geneset_id_col = "Geneset.ID", gene_col = "Genes.Returned")
+#'
+#' plot(as.dendrogram(hc))
+hclustKappa = function(
+    df,
+    geneset_id_col = NULL,
+    gene_col = NULL,
+    delim = NULL,
+    min_max_norm = FALSE,
+    v = FALSE) {
+
+  if (ncol(df) == 2) {
+    id_col = names(df)[1]
+    g_col  = names(df)[2]
+  } else {
+    if (is.null(geneset_id_col) || is.null(gene_col)) {
+      stop("df has more than 2 columns: please specify both `geneset_id_col` and `gene_col`.")
+    }
+    id_col = geneset_id_col
+    g_col  = gene_col
+  }
+
+  if (is.null(delim)) {
+    delim = grep("[[:punct:]]|[[:space:]]", df[[g_col]], value = TRUE)[1] |>
+      stringr::str_remove("[:alnum:]+(?=[:punct:]|[:space:])") |>
+      stringr::str_remove("(?<=[:punct:]|[:space:])[:alnum:].*$")
+    if (is.na(delim)) {
+      warning("could not automatically detect deliminator, setting delim = ', '")
+      delim = ", "
+    }
+    if (v) message("detected '", delim, "' as the gene deliminator")
+  }
+
+  long_df = df |>
+    dplyr::select(dplyr::all_of(c(id_col, g_col))) |>
+    tidyr::separate_longer_delim(!!rlang::sym(g_col), delim)
+
+  mat = .buildBinaryMatrix(long_df)
+  k   = .kappaMatrix(mat)
+  d   = .kappa2dist(k, min_max_norm = min_max_norm)
+  hclust(d, method = "average")
 }
 
 
